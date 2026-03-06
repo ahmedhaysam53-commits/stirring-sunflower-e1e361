@@ -14,6 +14,13 @@ const treeContainer = document.getElementById('tree-container');
 const STORAGE_KEY = 'chartOfAccountsTree';
 let selectedAccountCode = null;
 
+const deepClone = (value) => {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(value);
+  }
+  return JSON.parse(JSON.stringify(value));
+};
+
 const defaultChartOfAccounts = [
   {
     code: '1',
@@ -137,13 +144,13 @@ const defaultChartOfAccounts = [
 const loadTree = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return structuredClone(defaultChartOfAccounts);
+    if (!saved) return deepClone(defaultChartOfAccounts);
     const parsed = JSON.parse(saved);
     if (Array.isArray(parsed)) return parsed;
   } catch (error) {
     console.warn('Failed to load chart of accounts.', error);
   }
-  return structuredClone(defaultChartOfAccounts);
+  return deepClone(defaultChartOfAccounts);
 };
 
 const saveTree = (nodes) => {
