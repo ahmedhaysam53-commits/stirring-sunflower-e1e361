@@ -1,31 +1,209 @@
-const API = {
-  token: null,
-  async request(path, options = {}) {
-    const headers = options.headers || {};
-    if (this.token) {
-      headers.Authorization = `Bearer ${this.token}`;
+const STATIC_MODE = window.location.hostname.includes('github.io');
+
+const StaticStore = {
+  load(key, fallback) {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return fallback;
     }
-    const response = await fetch(path, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers,
-      },
-    });
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data.error || 'حدث خطأ');
-    }
-    if (response.status === 204) return null;
-    return response.json();
+  },
+  save(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
   },
 };
+
+const StaticAPI = {
+  token: null,
+  async request(path, options = {}) {
+    const method = (options.method || 'GET').toUpperCase();
+    const body = options.body ? JSON.parse(options.body) : null;
+
+    const data = {
+      users: StaticStore.load('users', []),
+      accounts: StaticStore.load('accounts', []),
+      customers: StaticStore.load('customers', []),
+      suppliers: StaticStore.load('suppliers', []),
+      receipts: StaticStore.load('receipts', []),
+      payments: StaticStore.load('payments', []),
+      journals: StaticStore.load('journals', []),
+      journal_lines: StaticStore.load('journal_lines', []),
+    };
+
+    const saveAll = () => {
+      Object.entries(data).forEach(([key, value]) => StaticStore.save(key, value));
+    };
+
+    if (path === '/api/auth/register' && method === 'POST') {
+      if (!body?.email || !body?.password || !body?.name) {
+        throw new Error('Missing fields');
+      }
+      if (data.users.some((u) => u.email === body.email)) {
+        throw new Error('Email already exists');
+      }
+      const user = {
+        id: crypto.randomUUID(),
+        name: body.name,
+        email: body.email,
+        password: body.password,
+      };
+      data.users.push(user);
+      saveAll();
+      return { id: user.id, name: user.name, email: user.email };
+    }
+
+    if (path === '/api/auth/login' && method === 'POST') {
+      const user = data.users.find(
+        (u) => u.email === body?.email && u.password === body?.password
+      );
+      if (!user) throw new Error('Invalid credentials');
+      return { token: 'static-token', user: { id: user.id, name: user.name, email: user.email } };
+    }
+
+    if (path === '/api/accounts' && method === 'GET') {
+      return data.accounts;
+    }
+    if (path === '/api/accounts' && method === 'POST') {
+      const item = {
+        id: crypto.randomUUID(),
+        code: body.code,
+        name: body.name,
+        type: body.type,
+        parent_id: body.parent_id || null,
+      };
+      data.accounts.push(item);
+      saveAll();
+      return item;
+    }
+
+    if (path === '/api/customers' && method === 'GET') return data.customers;
+    if (path === '/api/customers' && method === 'POST') {
+      const item = { id: crypto.randomUUID(), balance: 0, ...body };
+      data.customers.push(item);
+      saveAll();
+      return item;
+    }
+
+    if (path === '/api/suppliers' && method === 'GET') return data.suppliers;
+    if (path === '/api/suppliers' && method === 'POST') {
+      const item = { id: crypto.randomUUID(), balance: 0, ...body };
+      data.suppliers.push(item);
+      saveAll();
+      return item;
+    }
+
+    if (path === '/api/receipts' && method === 'GET') return data.receipts;
+    if (path === '/api/receipts' && method === 'POST') {
+      const item = { id: crypto.randomUUID(), ...body };
+      data.receipts.push(item);
+      saveAll();
+      return item;
+    }
+
+    if (path === '/api/payments' && method === 'GET') return data.payments;
+    if (path === '/api/payments' && method === 'POST') {
+      const item = { id: crypto.randomUUID(), ...body };
+      data.payments.push(item);
+      saveAll();
+      return item;
+    }
+
+    if (path === '/api/journals' && method === 'GET') return data.journals;
+    if (path === '/api/journals' && method === 'POST') {
+      const entry = {
+        id: crypto.randomUUID(),
+        entry_date: body.entry_date,
+        description: body.description || '',
+      };
+      data.journals.push(entry);
+      (body.lines || []).forEach((line) => {
+        data.journal_lines.push({ id: crypto.randomUUID(), entry_id: entry.id, ...line });
+      });
+      saveAll();
+      return entry;
+    }
+
+    if (path === '/api/reports/trial-balance' && method === 'GET') {
+      const totals = {};
+      data.accounts.forEach((acc) => {
+        totals[acc.id] = { code: acc.code, name: acc.name, type: acc.type, total_debit: 0, total_credit: 0, balance: 0 };
+      });
+      data.journal_lines.forEach((line) => {
+        const record = totals[line.account_id];
+        if (!record) return;
+        record.total_debit += Number(line.debit || 0);
+        record.total_credit += Number(line.credit || 0);
+        record.balance = record.total_debit - record.total_credit;
+      });
+      return Object.values(totals);
+    }
+
+    if (path === '/api/reports/income-statement' && method === 'GET') {
+      const trial = await this.request('/api/reports/trial-balance');
+      const revenue = trial
+        .filter((row) => row.type === 'revenue')
+        .reduce((sum, row) => sum + (row.total_credit - row.total_debit), 0);
+      const expense = trial
+        .filter((row) => row.type === 'expense')
+        .reduce((sum, row) => sum + (row.total_debit - row.total_credit), 0);
+      return { revenue, expense };
+    }
+
+    if (path === '/api/reports/balance-sheet' && method === 'GET') {
+      const trial = await this.request('/api/reports/trial-balance');
+      const assets = trial
+        .filter((row) => row.type === 'asset')
+        .reduce((sum, row) => sum + row.balance, 0);
+      const liabilities = trial
+        .filter((row) => row.type === 'liability')
+        .reduce((sum, row) => sum + (row.total_credit - row.total_debit), 0);
+      const equity = trial
+        .filter((row) => row.type === 'equity')
+        .reduce((sum, row) => sum + (row.total_credit - row.total_debit), 0);
+      return { assets, liabilities, equity };
+    }
+
+    throw new Error('Unsupported operation in static mode');
+  },
+};
+
+const API = STATIC_MODE
+  ? StaticAPI
+  : {
+      token: null,
+      async request(path, options = {}) {
+        const headers = options.headers || {};
+        if (this.token) {
+          headers.Authorization = `Bearer ${this.token}`;
+        }
+        const response = await fetch(path, {
+          ...options,
+          headers: {
+            'Content-Type': 'application/json',
+            ...headers,
+          },
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || 'حدث خطأ');
+        }
+        if (response.status === 204) return null;
+        return response.json();
+      },
+    };
 
 const toast = (message) => {
   const toastEl = document.getElementById('toast');
   toastEl.textContent = message;
   toastEl.classList.add('show');
   setTimeout(() => toastEl.classList.remove('show'), 2400);
+};
+
+const handleError = (error) => {
+  console.error(error);
+  toast(error.message || 'حدث خطأ');
 };
 
 const authPanel = document.getElementById('auth-panel');
@@ -105,9 +283,13 @@ const renderAccounts = async () => {
     event.preventDefault();
     const form = event.target;
     const payload = Object.fromEntries(new FormData(form));
-    await API.request('/api/accounts', { method: 'POST', body: JSON.stringify(payload) });
-    toast('تمت إضافة الحساب');
-    renderAccounts();
+    try {
+      await API.request('/api/accounts', { method: 'POST', body: JSON.stringify(payload) });
+      toast('تمت إضافة الحساب');
+      renderAccounts();
+    } catch (error) {
+      handleError(error);
+    }
   });
 };
 
@@ -174,9 +356,13 @@ const renderJournals = async () => {
         },
       ],
     };
-    await API.request('/api/journals', { method: 'POST', body: JSON.stringify(payload) });
-    toast('تم تسجيل القيد');
-    renderJournals();
+    try {
+      await API.request('/api/journals', { method: 'POST', body: JSON.stringify(payload) });
+      toast('تم تسجيل القيد');
+      renderJournals();
+    } catch (error) {
+      handleError(error);
+    }
   });
 };
 
@@ -222,9 +408,13 @@ const renderSimpleList = async (title, endpoint, formFields) => {
   document.getElementById('simple-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const payload = Object.fromEntries(new FormData(event.target));
-    await API.request(endpoint, { method: 'POST', body: JSON.stringify(payload) });
-    toast('تمت الإضافة');
-    renderSimpleList(title, endpoint, formFields);
+    try {
+      await API.request(endpoint, { method: 'POST', body: JSON.stringify(payload) });
+      toast('تمت الإضافة');
+      renderSimpleList(title, endpoint, formFields);
+    } catch (error) {
+      handleError(error);
+    }
   });
 };
 
@@ -316,7 +506,11 @@ menu.addEventListener('click', async (event) => {
   document.querySelectorAll('.menu-item').forEach((item) => item.classList.remove('active'));
   button.classList.add('active');
   if (screenHandlers[screen]) {
-    await screenHandlers[screen]();
+    try {
+      await screenHandlers[screen]();
+    } catch (error) {
+      handleError(error);
+    }
   }
 });
 
@@ -332,24 +526,32 @@ const registerForm = document.getElementById('register-form');
 loginForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const payload = Object.fromEntries(new FormData(event.target));
-  const data = await API.request('/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  });
-  API.token = data.token;
-  localStorage.setItem('token', data.token);
-  showApp();
-  toast('تم تسجيل الدخول');
+  try {
+    const data = await API.request('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    API.token = data.token;
+    localStorage.setItem('token', data.token);
+    showApp();
+    toast('تم تسجيل الدخول');
+  } catch (error) {
+    handleError(error);
+  }
 });
 
 registerForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const payload = Object.fromEntries(new FormData(event.target));
-  await API.request('/api/auth/register', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  });
-  toast('تم إنشاء الحساب. يمكنك تسجيل الدخول الآن.');
+  try {
+    await API.request('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    toast('تم إنشاء الحساب. يمكنك تسجيل الدخول الآن.');
+  } catch (error) {
+    handleError(error);
+  }
 });
 
 const savedToken = localStorage.getItem('token');

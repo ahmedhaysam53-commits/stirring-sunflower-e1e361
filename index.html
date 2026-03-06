@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>النظام المحاسبي</title>
+    <link rel="stylesheet" href="public/styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>النظام المحاسبي</h1>
+      <div class="user-actions" id="user-actions">
+        <button class="secondary" id="logout" type="button" hidden>تسجيل خروج</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="auth-panel" id="auth-panel">
+        <div class="auth-card">
+          <h2>تسجيل الدخول</h2>
+          <form id="login-form">
+            <label>
+              البريد الإلكتروني
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              كلمة المرور
+              <input type="password" name="password" required />
+            </label>
+            <button type="submit">دخول</button>
+          </form>
+          <p class="hint">ليس لديك حساب؟ استخدم نموذج التسجيل بالأسفل.</p>
+        </div>
+
+        <div class="auth-card">
+          <h2>تسجيل جديد</h2>
+          <form id="register-form">
+            <label>
+              الاسم
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              البريد الإلكتروني
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              كلمة المرور
+              <input type="password" name="password" required />
+            </label>
+            <button type="submit">إنشاء حساب</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="app-layout" id="app-layout" hidden>
+        <aside class="sidebar">
+          <h3>القائمة</h3>
+          <nav class="menu" id="menu">
+            <button class="menu-item" data-screen="accounts">دليل الحسابات</button>
+            <button class="menu-item" data-screen="journals">القيود اليومية</button>
+            <button class="menu-item" data-screen="customers">العملاء</button>
+            <button class="menu-item" data-screen="suppliers">الموردين</button>
+            <button class="menu-item" data-screen="receipts">سندات قبض</button>
+            <button class="menu-item" data-screen="payments">سندات صرف</button>
+            <button class="menu-item" data-screen="reports">التقارير</button>
+          </nav>
+        </aside>
+
+        <section class="content">
+          <div id="screen-title" class="screen-title">اختر شاشة من القائمة</div>
+          <div id="screen-body"></div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="public/app.js"></script>
+  </body>
+</html>
