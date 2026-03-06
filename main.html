@@ -34,6 +34,12 @@
             </button>
             <div class="dropdown" id="dropdown" hidden>
               <button class="dropdown-item" type="button" id="btn-2" data-key="2">2</button>
+              <div class="dropdown-submenu" id="finance-menu" hidden>
+                <button class="submenu-item" type="button" id="finance-tree-btn">شجرة الحسابات</button>
+                <button class="submenu-item" type="button">الميزان</button>
+                <button class="submenu-item" type="button">قائمة المركز المالي</button>
+                <button class="submenu-item" type="button">قائمة الدخل</button>
+              </div>
               <button class="dropdown-item" type="button" id="btn-3" data-key="3">3</button>
               <button class="dropdown-item" type="button" id="btn-4" data-key="4">4</button>
               <button class="dropdown-item" type="button" id="btn-5" data-key="5">5</button>
@@ -46,7 +52,13 @@
             </div>
           </aside>
         </section>
-
+        <section class="tree-section" id="finance-tree" hidden>
+          <header class="tree-header">
+            <h3>شجرة الحسابات</h3>
+            <button class="secondary" type="button" id="close-tree">إخفاء</button>
+          </header>
+          <div class="tree-container" id="tree-container"></div>
+        </section>
         
       </section>
     </main>
