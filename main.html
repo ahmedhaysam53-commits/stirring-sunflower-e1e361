@@ -76,9 +76,9 @@
             </div>
             <div class="erp-window-body">
               <div class="crud-bar">
-                <button class="btn btn-add" type="button">إضافة حساب +</button>
-                <button class="btn btn-edit" type="button">تعديل حساب</button>
-                <button class="btn btn-delete" type="button">حذف</button>
+                <button class="btn btn-add" type="button" data-action="add">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button" data-action="edit">تعديل حساب</button>
+                <button class="btn btn-delete" type="button" data-action="delete">حذف</button>
               </div>
               <table class="erp-table">
                 <thead>
@@ -86,13 +86,9 @@
                     <th>كود الحساب</th>
                     <th>اسم الحساب</th>
                     <th>النوع</th>
-                    
                   </tr>
                 </thead>
-                <tbody>
-                  <tr><td>111</td><td>النقدية بالصندوق</td><td>متداول</td></tr>
-                  <tr><td>121</td><td>السيارات</td><td>ثابت</td></tr>
-                </tbody>
+                <tbody data-table="assets"></tbody>
               </table>
             </div>
           </div>
@@ -108,9 +104,9 @@
             </div>
             <div class="erp-window-body">
               <div class="crud-bar">
-                <button class="btn btn-add" type="button">إضافة حساب +</button>
-                <button class="btn btn-edit" type="button">تعديل حساب</button>
-                <button class="btn btn-delete" type="button">حذف</button>
+                <button class="btn btn-add" type="button" data-action="add">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button" data-action="edit">تعديل حساب</button>
+                <button class="btn btn-delete" type="button" data-action="delete">حذف</button>
               </div>
               <table class="erp-table">
                 <thead>
@@ -121,10 +117,7 @@
                     
                   </tr>
                 </thead>
-                <tbody>
-                  <tr><td>211</td><td>الموردون</td><td>متداول</td></tr>
-                  <tr><td>212</td><td>مصروفات مستحقة</td><td>متداول</td></tr>
-                </tbody>
+                <tbody data-table="liabilities"></tbody>
               </table>
             </div>
           </div>
@@ -140,9 +133,9 @@
             </div>
             <div class="erp-window-body">
               <div class="crud-bar">
-                <button class="btn btn-add" type="button">إضافة حساب +</button>
-                <button class="btn btn-edit" type="button">تعديل حساب</button>
-                <button class="btn btn-delete" type="button">حذف</button>
+                <button class="btn btn-add" type="button" data-action="add">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button" data-action="edit">تعديل حساب</button>
+                <button class="btn btn-delete" type="button" data-action="delete">حذف</button>
               </div>
               <table class="erp-table">
                 <thead>
@@ -153,10 +146,7 @@
                     
                   </tr>
                 </thead>
-                <tbody>
-                  <tr><td>31</td><td>رأس المال</td><td>حقوق ملكية</td></tr>
-                  <tr><td>33</td><td>الأرباح والخسائر المرحلة</td><td>حقوق ملكية</td></tr>
-                </tbody>
+                <tbody data-table="equity"></tbody>
               </table>
             </div>
           </div>
@@ -172,9 +162,9 @@
             </div>
             <div class="erp-window-body">
               <div class="crud-bar">
-                <button class="btn btn-add" type="button">إضافة حساب +</button>
-                <button class="btn btn-edit" type="button">تعديل حساب</button>
-                <button class="btn btn-delete" type="button">حذف</button>
+                <button class="btn btn-add" type="button" data-action="add">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button" data-action="edit">تعديل حساب</button>
+                <button class="btn btn-delete" type="button" data-action="delete">حذف</button>
               </div>
               <table class="erp-table">
                 <thead>
@@ -185,10 +175,7 @@
                     
                   </tr>
                 </thead>
-                <tbody>
-                  <tr><td>41</td><td>مبيعات النشاط الجاري</td><td>إيراد</td></tr>
-                  <tr><td>43</td><td>إيرادات متنوعة أخرى</td><td>إيراد</td></tr>
-                </tbody>
+                <tbody data-table="revenues"></tbody>
               </table>
             </div>
           </div>
@@ -204,9 +191,9 @@
             </div>
             <div class="erp-window-body">
               <div class="crud-bar">
-                <button class="btn btn-add" type="button">إضافة حساب +</button>
-                <button class="btn btn-edit" type="button">تعديل حساب</button>
-                <button class="btn btn-delete" type="button">حذف</button>
+                <button class="btn btn-add" type="button" data-action="add">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button" data-action="edit">تعديل حساب</button>
+                <button class="btn btn-delete" type="button" data-action="delete">حذف</button>
               </div>
               <table class="erp-table">
                 <thead>
@@ -217,11 +204,30 @@
                     
                   </tr>
                 </thead>
-                <tbody>
-                  <tr><td>5201</td><td>رواتب وأجور إدارية</td><td>مصروف</td></tr>
-                  <tr><td>531</td><td>دعاية وإعلان</td><td>مصروف</td></tr>
-                </tbody>
+                <tbody data-table="expenses"></tbody>
               </table>
+            </div>
+          </div>
+        </section>
+
+        <div class="modal" id="account-modal" hidden>
+          <div class="modal-content">
+            <h4 id="modal-title">إضافة حساب</h4>
+            <label class="modal-field">
+              <span>كود الحساب</span>
+              <input type="text" id="account-code" />
+            </label>
+            <label class="modal-field">
+              <span>اسم الحساب</span>
+              <input type="text" id="account-name" />
+            </label>
+            <label class="modal-field">
+              <span>النوع</span>
+              <input type="text" id="account-type" />
+            </label>
+            <div class="modal-actions">
+              <button type="button" class="secondary" id="modal-cancel">إلغاء</button>
+              <button type="button" class="primary" id="modal-save">حفظ</button>
             </div>
           </div>
         </section>

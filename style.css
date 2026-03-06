@@ -312,6 +312,48 @@ body {
   background: #f8f9fa;
 }
 
+.erp-table tr.selected {
+  background: rgba(0, 120, 215, 0.1);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: grid;
+  place-items: center;
+  z-index: 500;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  width: min(420px, 90%);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  display: grid;
+  gap: 12px;
+}
+
+.modal-field {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.modal-field input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .tree-header {
   display: flex;
   align-items: center;
