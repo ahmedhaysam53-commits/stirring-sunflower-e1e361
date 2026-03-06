@@ -26,10 +26,16 @@ const financeMenu = document.getElementById('finance-menu');
 const financeTreeButton = document.getElementById('finance-tree-btn');
 const financeTreeSection = document.getElementById('finance-tree');
 const closeTreeButton = document.getElementById('close-tree');
+const addAccountButton = document.getElementById('tree-add');
+const editAccountButton = document.getElementById('tree-edit');
+const deleteAccountButton = document.getElementById('tree-delete');
 
 const treeContainer = document.getElementById('tree-container');
 
-const chartOfAccounts = [
+const STORAGE_KEY = 'chartOfAccountsTree';
+let selectedAccountCode = null;
+
+const defaultChartOfAccounts = [
   {
     code: '1',
     name: 'الأصول (Assets)',
@@ -149,12 +155,32 @@ const chartOfAccounts = [
   },
 ];
 
+const loadTree = () => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return structuredClone(defaultChartOfAccounts);
+    const parsed = JSON.parse(saved);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (error) {
+    console.warn('Failed to load chart of accounts.', error);
+  }
+  return structuredClone(defaultChartOfAccounts);
+};
+
+const saveTree = (nodes) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(nodes));
+};
+
+let chartOfAccounts = loadTree();
+
 const renderTreeNodes = (nodes) =>
   nodes
     .map((node) => {
+      const isSelected = node.code === selectedAccountCode;
+      const selectedClass = isSelected ? 'tree-selected' : '';
       if (node.children && node.children.length) {
         return `
-          <details class="tree-node">
+          <details class="tree-node ${selectedClass}" data-code="${node.code}">
             <summary>
               <div class="node-label">
                 <span>${node.name}</span>
@@ -169,7 +195,7 @@ const renderTreeNodes = (nodes) =>
       }
 
       return `
-        <div class="leaf-node">
+        <div class="leaf-node ${selectedClass}" data-code="${node.code}">
           <span>${node.name}</span>
           <span class="node-code">${node.code}</span>
         </div>
@@ -177,9 +203,35 @@ const renderTreeNodes = (nodes) =>
     })
     .join('');
 
-if (treeContainer) {
+const renderTree = () => {
+  if (!treeContainer) return;
   treeContainer.innerHTML = renderTreeNodes(chartOfAccounts);
-}
+};
+
+const findNodeByCode = (nodes, code, parent = null, container = null) => {
+  for (const node of nodes) {
+    if (node.code === code) {
+      return { node, parent, container: container ?? nodes };
+    }
+    if (node.children && node.children.length) {
+      const found = findNodeByCode(node.children, code, node, node.children);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+const codeExists = (nodes, code, excludeCode = null) => {
+  for (const node of nodes) {
+    if (node.code === code && code !== excludeCode) return true;
+    if (node.children && node.children.length) {
+      if (codeExists(node.children, code, excludeCode)) return true;
+    }
+  }
+  return false;
+};
+
+renderTree();
 
 if (mainButton && dropdown) {
   mainButton.addEventListener('click', () => {
@@ -207,6 +259,97 @@ if (mainButton && dropdown) {
 if (closeTreeButton && financeTreeSection) {
   closeTreeButton.addEventListener('click', () => {
     financeTreeSection.hidden = true;
+  });
+}
+
+if (treeContainer) {
+  treeContainer.addEventListener('click', (event) => {
+    const target = event.target.closest('[data-code]');
+    if (!target || !treeContainer.contains(target)) return;
+    selectedAccountCode = target.dataset.code;
+    renderTree();
+  });
+}
+
+if (addAccountButton) {
+  addAccountButton.addEventListener('click', () => {
+    const newCode = prompt('أدخل كود الحساب الجديد:');
+    if (!newCode) return;
+    if (codeExists(chartOfAccounts, newCode)) {
+      alert('هذا الكود موجود بالفعل. اختر كوداً مختلفاً.');
+      return;
+    }
+    const newName = prompt('أدخل اسم الحساب الجديد:');
+    if (!newName) return;
+
+    const newAccount = { code: newCode.trim(), name: newName.trim() };
+    if (selectedAccountCode) {
+      const found = findNodeByCode(chartOfAccounts, selectedAccountCode);
+      if (found?.node) {
+        if (!found.node.children) {
+          found.node.children = [];
+        }
+        found.node.children.push(newAccount);
+      } else {
+        chartOfAccounts.push(newAccount);
+      }
+    } else {
+      chartOfAccounts.push(newAccount);
+    }
+
+    saveTree(chartOfAccounts);
+    renderTree();
+  });
+}
+
+if (editAccountButton) {
+  editAccountButton.addEventListener('click', () => {
+    if (!selectedAccountCode) {
+      alert('اختر حساباً أولاً للتعديل.');
+      return;
+    }
+    const found = findNodeByCode(chartOfAccounts, selectedAccountCode);
+    if (!found?.node) return;
+
+    const newCode = prompt('أدخل الكود الجديد:', found.node.code);
+    if (!newCode) return;
+    if (codeExists(chartOfAccounts, newCode.trim(), found.node.code)) {
+      alert('هذا الكود موجود بالفعل. اختر كوداً مختلفاً.');
+      return;
+    }
+    const newName = prompt('أدخل الاسم الجديد:', found.node.name);
+    if (!newName) return;
+
+    found.node.code = newCode.trim();
+    found.node.name = newName.trim();
+    selectedAccountCode = found.node.code;
+    saveTree(chartOfAccounts);
+    renderTree();
+  });
+}
+
+if (deleteAccountButton) {
+  deleteAccountButton.addEventListener('click', () => {
+    if (!selectedAccountCode) {
+      alert('اختر حساباً أولاً للحذف.');
+      return;
+    }
+    const found = findNodeByCode(chartOfAccounts, selectedAccountCode);
+    if (!found?.node || !found.container) return;
+
+    const hasChildren = found.node.children && found.node.children.length;
+    const confirmationMessage = hasChildren
+      ? 'هذا الحساب يحتوي على حسابات فرعية. هل تريد الحذف؟'
+      : 'هل تريد حذف هذا الحساب؟';
+    if (!confirm(confirmationMessage)) return;
+
+    const index = found.container.findIndex((item) => item.code === selectedAccountCode);
+    if (index !== -1) {
+      found.container.splice(index, 1);
+    }
+    selectedAccountCode = null;
+    saveTree(chartOfAccounts);
+    renderTree();
   });
 }
 

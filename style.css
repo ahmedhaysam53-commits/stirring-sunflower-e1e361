@@ -189,6 +189,34 @@ body {
   font-size: 18px;
 }
 
+.tree-actions {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0 16px;
+  flex-wrap: wrap;
+}
+
+.tree-actions .btn {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+
+.tree-actions .btn-add {
+  background: #16a34a;
+}
+
+.tree-actions .btn-edit {
+  background: #2563eb;
+}
+
+.tree-actions .btn-delete {
+  background: #dc2626;
+}
+
 .tree-container {
   display: grid;
   gap: 8px;
@@ -239,6 +267,16 @@ body {
   justify-content: space-between;
   gap: 8px;
   font-weight: 600;
+}
+
+.tree-selected {
+  border-color: var(--primary);
+  background: #eef2ff;
+  box-shadow: 0 8px 18px rgba(91, 124, 250, 0.18);
+}
+
+.tree-selected .node-code {
+  color: var(--primary-dark);
 }
 
 .excel-grid {
