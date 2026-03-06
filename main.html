@@ -57,7 +57,173 @@
             <h3>شجرة الحسابات</h3>
             <button class="secondary" type="button" id="close-tree">إخفاء</button>
           </header>
-          <div class="tree-container" id="tree-container"></div>
+          <div class="erp-desktop">
+            <button class="account-icon" type="button" data-win="assetsWin">📂<span>الأصول (Assets)</span></button>
+            <button class="account-icon" type="button" data-win="liabilitiesWin">💸<span>الالتزامات (Liabilities)</span></button>
+            <button class="account-icon" type="button" data-win="equityWin">⚖️<span>حقوق الملكية (Equity)</span></button>
+            <button class="account-icon" type="button" data-win="revenueWin">📈<span>الإيرادات (Revenues)</span></button>
+            <button class="account-icon" type="button" data-win="expensesWin">📉<span>المصروفات (Expenses)</span></button>
+          </div>
+
+          <div id="assetsWin" class="erp-window" hidden>
+            <div class="erp-window-header">
+              <span>إدارة حسابات الأصول</span>
+              <div class="erp-controls">
+                <button type="button" class="erp-min" data-action="minimize">─</button>
+                <button type="button" class="erp-max" data-action="maximize">▢</button>
+                <button type="button" class="erp-close" data-action="close">×</button>
+              </div>
+            </div>
+            <div class="erp-window-body">
+              <div class="crud-bar">
+                <button class="btn btn-add" type="button">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button">تعديل حساب</button>
+                <button class="btn btn-delete" type="button">حذف</button>
+              </div>
+              <table class="erp-table">
+                <thead>
+                  <tr>
+                    <th>كود الحساب</th>
+                    <th>اسم الحساب</th>
+                    <th>النوع</th>
+                    <th>الرصيد الحالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>111</td><td>النقدية بالصندوق</td><td>متداول</td><td>50,000</td></tr>
+                  <tr><td>121</td><td>السيارات</td><td>ثابت</td><td>120,000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="liabilitiesWin" class="erp-window" hidden>
+            <div class="erp-window-header">
+              <span>إدارة حسابات الالتزامات</span>
+              <div class="erp-controls">
+                <button type="button" class="erp-min" data-action="minimize">─</button>
+                <button type="button" class="erp-max" data-action="maximize">▢</button>
+                <button type="button" class="erp-close" data-action="close">×</button>
+              </div>
+            </div>
+            <div class="erp-window-body">
+              <div class="crud-bar">
+                <button class="btn btn-add" type="button">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button">تعديل حساب</button>
+                <button class="btn btn-delete" type="button">حذف</button>
+              </div>
+              <table class="erp-table">
+                <thead>
+                  <tr>
+                    <th>كود الحساب</th>
+                    <th>اسم الحساب</th>
+                    <th>النوع</th>
+                    <th>الرصيد الحالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>211</td><td>الموردون</td><td>متداول</td><td>30,000</td></tr>
+                  <tr><td>212</td><td>مصروفات مستحقة</td><td>متداول</td><td>18,500</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="equityWin" class="erp-window" hidden>
+            <div class="erp-window-header">
+              <span>إدارة حقوق الملكية</span>
+              <div class="erp-controls">
+                <button type="button" class="erp-min" data-action="minimize">─</button>
+                <button type="button" class="erp-max" data-action="maximize">▢</button>
+                <button type="button" class="erp-close" data-action="close">×</button>
+              </div>
+            </div>
+            <div class="erp-window-body">
+              <div class="crud-bar">
+                <button class="btn btn-add" type="button">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button">تعديل حساب</button>
+                <button class="btn btn-delete" type="button">حذف</button>
+              </div>
+              <table class="erp-table">
+                <thead>
+                  <tr>
+                    <th>كود الحساب</th>
+                    <th>اسم الحساب</th>
+                    <th>النوع</th>
+                    <th>الرصيد الحالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>31</td><td>رأس المال</td><td>حقوق ملكية</td><td>250,000</td></tr>
+                  <tr><td>33</td><td>الأرباح والخسائر المرحلة</td><td>حقوق ملكية</td><td>45,000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="revenueWin" class="erp-window" hidden>
+            <div class="erp-window-header">
+              <span>إدارة الإيرادات</span>
+              <div class="erp-controls">
+                <button type="button" class="erp-min" data-action="minimize">─</button>
+                <button type="button" class="erp-max" data-action="maximize">▢</button>
+                <button type="button" class="erp-close" data-action="close">×</button>
+              </div>
+            </div>
+            <div class="erp-window-body">
+              <div class="crud-bar">
+                <button class="btn btn-add" type="button">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button">تعديل حساب</button>
+                <button class="btn btn-delete" type="button">حذف</button>
+              </div>
+              <table class="erp-table">
+                <thead>
+                  <tr>
+                    <th>كود الحساب</th>
+                    <th>اسم الحساب</th>
+                    <th>النوع</th>
+                    <th>الرصيد الحالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>41</td><td>مبيعات النشاط الجاري</td><td>إيراد</td><td>320,000</td></tr>
+                  <tr><td>43</td><td>إيرادات متنوعة أخرى</td><td>إيراد</td><td>12,500</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="expensesWin" class="erp-window" hidden>
+            <div class="erp-window-header">
+              <span>إدارة المصروفات</span>
+              <div class="erp-controls">
+                <button type="button" class="erp-min" data-action="minimize">─</button>
+                <button type="button" class="erp-max" data-action="maximize">▢</button>
+                <button type="button" class="erp-close" data-action="close">×</button>
+              </div>
+            </div>
+            <div class="erp-window-body">
+              <div class="crud-bar">
+                <button class="btn btn-add" type="button">إضافة حساب +</button>
+                <button class="btn btn-edit" type="button">تعديل حساب</button>
+                <button class="btn btn-delete" type="button">حذف</button>
+              </div>
+              <table class="erp-table">
+                <thead>
+                  <tr>
+                    <th>كود الحساب</th>
+                    <th>اسم الحساب</th>
+                    <th>النوع</th>
+                    <th>الرصيد الحالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>5201</td><td>رواتب وأجور إدارية</td><td>مصروف</td><td>28,000</td></tr>
+                  <tr><td>531</td><td>دعاية وإعلان</td><td>مصروف</td><td>8,500</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </section>
         
       </section>
