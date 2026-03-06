@@ -555,7 +555,9 @@ registerForm.addEventListener('submit', async (event) => {
 });
 
 const savedToken = localStorage.getItem('token');
-if (savedToken) {
+if (STATIC_MODE) {
+  showApp();
+} else if (savedToken) {
   API.token = savedToken;
   showApp();
 } else {
