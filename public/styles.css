@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Tajawal', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f4f6fb;
+  color: #1f2937;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  background: #1f2a44;
+  color: #fff;
+}
+
+.container {
+  padding: 24px 32px;
+}
+
+.auth-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.auth-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.auth-card h2 {
+  margin-top: 0;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+}
+
+button {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #1f2937;
+}
+
+.hint {
+  margin-top: 10px;
+  color: #6b7280;
+}
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.sidebar {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.menu {
+  display: grid;
+  gap: 10px;
+}
+
+.menu-item {
+  background: #f1f5f9;
+  color: #1f2937;
+  border-radius: 10px;
+}
+
+.menu-item.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.screen-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  text-align: right;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: #1f2937;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+}
