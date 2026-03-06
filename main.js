@@ -4,6 +4,7 @@ const closeTreeButton = document.getElementById('close-tree');
 const screenTitle = document.getElementById('screen-title');
 const screenDescription = document.getElementById('screen-description');
 const screenBody = document.getElementById('screen-body');
+const menuTitle = document.getElementById('menu-title');
 const addAccountButton = document.getElementById('tree-add');
 const editAccountButton = document.getElementById('tree-edit');
 const deleteAccountButton = document.getElementById('tree-delete');
@@ -152,115 +153,176 @@ const saveTree = (nodes) => {
 let chartOfAccounts = loadTree();
 
 const SCREEN_NAMES = {
-  daily: {
-    label: 'اليومية',
-    children: [
-      { key: 'daily_sub1', label: 'القيود اليومية' },
-      { key: 'daily_sub2', label: 'شاشة ترحيل القيود' },
-      { key: 'daily_sub3', label: 'مراجعة القيود المرحّلة' },
-      { key: 'daily_sub4', label: 'عرض القيود' },
-      { key: 'daily_sub5', label: 'طباعة القيود' },
-    ],
-  },
-  accounts: {
-    label: 'الحسابات',
-    children: [
-      { key: 'accounts_sub0', label: 'شجرة الحسابات' },
-      { key: 'accounts_sub1', label: 'ميزان المراجعة' },
-      { key: 'accounts_sub2', label: 'قائمة الدخل' },
-      { key: 'accounts_sub3', label: 'قائمة المركز المالي' },
-      { key: 'accounts_sub4', label: 'قائمة التدفقات النقدية' },
-    ],
-  },
-  statement: {
-    label: 'كشف حساب',
-    children: [
-      { key: 'statement_sub0', label: 'كشف حسابات فرعية' },
-      { key: 'statement_sub0b', label: 'كشف حسابات رئيسية' },
-      { key: 'statement_sub1', label: 'كشف حساب عمميل' },
-      { key: 'statement_sub2', label: 'أرصدة عملاء' },
-      { key: 'statement_sub3', label: 'كشف حساب مورد' },
-      { key: 'statement_sub4', label: 'أرصدة موردين' },
-    ],
-  },
-  receipts_payments: {
-    label: 'السندات المالية',
-    children: [
-      { key: 'receipts_payments_sub', label: 'سندات الصندوق' },
-      { key: 'receipts_payments_sub3', label: 'قيود السندات' },
-    ],
-  },
-  vat: {
-    label: 'ضريبة القيمة المضافة',
-    children: [
-      { key: 'vat_sub1', label: 'ضريبة المبيعات' },
-      { key: 'vat_sub2', label: 'ضريبة المشتريات' },
-      { key: 'vat_sub3', label: 'الاقرار الضريبي' },
-    ],
-  },
-  sales: {
-    label: 'المبيعات',
-    children: [
-      { key: 'sales_sub1', label: 'عرض سعر (Quotation)' },
-      { key: 'sales_sub2', label: 'أمر بيع (Sales Order)' },
-      { key: 'sales_sub3', label: 'فاتورة مبيعات (Sales Invoice)' },
-      { key: 'sales_sub4', label: 'مرتجع مبيعات (Sales Return)' },
-      { key: 'sales_sub5', label: 'بيانات العملاء (Customers)' },
-      { key: 'sales_sub6', label: 'تعريف المندوبين (Sales Agents)' },
-      { key: 'sales_sub7', label: 'تقارير المبيعات (Sales Reports)' },
-    ],
-  },
-  purchases: {
-    label: 'المشتريات',
-    children: [
-      { key: 'purchases_sub1', label: 'طلب شراء (Purchase Requisition)' },
-      { key: 'purchases_sub2', label: 'أمر شراء (Purchase Order)' },
-      { key: 'purchases_sub3', label: 'فاتورة مشتريات (Purchase Invoice)' },
-      { key: 'purchases_sub4', label: 'مرتجع مشتريات (Purchase Return)' },
-      { key: 'purchases_sub5', label: 'بيانات الموردين (Suppliers)' },
-      { key: 'purchases_sub6', label: 'إشعار استلام بضاعة (Goods Received Note)' },
-      { key: 'purchases_sub7', label: 'تقارير المشتريات (Purchase Reports)' },
-    ],
-  },
-  warehouses: {
-    label: 'المستودعات',
-    children: [
-      { key: 'warehouses_sub1', label: 'تعريف الأصناف' },
-      { key: 'warehouses_sub2', label: 'إذن إضافة مخزني' },
-      { key: 'warehouses_sub3', label: 'إذن صرف مخزني' },
-      { key: 'warehouses_sub4', label: 'جرد المخزن' },
-      { key: 'warehouses_sub5', label: 'تسوية مخزنية' },
-      { key: 'warehouses_sub6', label: 'تعريف المستودعات' },
-      { key: 'warehouses_sub7', label: 'تقارير حركة الأصناف والمخزون' },
-    ],
-  },
-  human_resources: {
-    label: 'الموارد البشرية',
-    children: [
-      { key: 'human_resources_sub1', label: 'إعدادات هيكل الرواتب' },
-      { key: 'human_resources_sub2', label: 'سجل السلف والقروض' },
-      { key: 'human_resources_sub3', label: 'المكافآت والبدلات الاستثنائية' },
-      { key: 'human_resources_sub4', label: 'الخصومات والجزاءات' },
-      { key: 'human_resources_sub5', label: 'شاشة احتساب مسير الرواتب' },
-      { key: 'human_resources_sub6', label: 'اعتماد صرف الرواتب' },
-      { key: 'human_resources_sub7', label: 'تقارير الرواتب والتحويلات البنكية' },
-    ],
-  },
-  settings: {
-    label: 'الإعدادات',
-    children: [
-      { key: 'settings_sub1', label: 'بيانات الشركة' },
-      { key: 'settings_sub2', label: 'إدارة المستخدمين والصلاحات' },
-      { key: 'settings_sub3', label: 'إعدادات السنة المالية' },
-      { key: 'settings_sub4', label: 'تعريف العملات وأسعار الصرف' },
-      { key: 'settings_sub5', label: 'إعدادات الضرائب' },
-      { key: 'settings_sub6', label: 'إعدادات التنبيهات والرسائل' },
-      { key: 'settings_sub7', label: 'النسخ الاحتياطي واستعادة البيانات' },
-      { key: 'settings_sub8', label: 'سجل الأحداث / مراقبة النظام' },
-      { key: 'settings_sub9', label: 'إعدادات الطابعات والتقارير' },
-    ],
+  ar: {
+    menu: 'القائمة',
+    daily: 'اليومية',
+    daily_sub1: 'القيود اليومية',
+    daily_sub2: 'شاشة ترحيل القيود',
+    daily_sub3: 'مراجعة القيود المرحّلة',
+    daily_sub4: 'عرض القيود',
+    daily_sub5: 'طباعة القيود',
+    accounts: 'الحسابات',
+    accounts_sub0: 'شجرة الحسابات',
+    accounts_sub1: 'ميزان المراجعة',
+    accounts_sub2: 'قائمة الدخل',
+    accounts_sub3: 'قائمة المركز المالي',
+    accounts_sub4: 'قائمة التدفقات النقدية',
+    statement: 'كشف حساب',
+    statement_sub0: 'كشف حسابات فرعية',
+    statement_sub0b: 'كشف حسابات رئيسية',
+    statement_sub1: 'كشف حساب عمميل',
+    statement_sub2: 'أرصدة عملاء',
+    statement_sub3: 'كشف حساب مورد',
+    statement_sub4: 'أرصدة موردين',
+    receipts_payments: 'السندات المالية',
+    receipts_payments_sub: 'سندات الصندوق',
+    receipts_payments_sub3: 'قيود السندات',
+    vat: 'ضريبة القيمة المضافة',
+    vat_sub1: 'ضريبة المبيعات',
+    vat_sub2: 'ضريبة المشتريات',
+    vat_sub3: 'الاقرار الضريبي',
+    sales: 'المبيعات',
+    sales_sub1: 'عرض سعر (Quotation)',
+    sales_sub2: 'أمر بيع (Sales Order)',
+    sales_sub3: 'فاتورة مبيعات (Sales Invoice)',
+    sales_sub4: 'مرتجع مبيعات (Sales Return)',
+    sales_sub5: 'بيانات العملاء (Customers)',
+    sales_sub6: 'تعريف المندوبين (Sales Agents)',
+    sales_sub7: 'تقارير المبيعات (Sales Reports)',
+    purchases: 'المشتريات',
+    purchases_sub1: 'طلب شراء (Purchase Requisition)',
+    purchases_sub2: 'أمر شراء (Purchase Order)',
+    purchases_sub3: 'فاتورة مشتريات (Purchase Invoice)',
+    purchases_sub4: 'مرتجع مشتريات (Purchase Return)',
+    purchases_sub5: 'بيانات الموردين (Suppliers)',
+    purchases_sub6: 'إشعار استلام بضاعة (Goods Received Note)',
+    purchases_sub7: 'تقارير المشتريات (Purchase Reports)',
+    warehouses: 'المستودعات',
+    warehouses_sub1: 'تعريف الأصناف',
+    warehouses_sub2: 'إذن إضافة مخزني',
+    warehouses_sub3: 'إذن صرف مخزني',
+    warehouses_sub4: 'جرد المخزن',
+    warehouses_sub5: 'تسوية مخزنية',
+    warehouses_sub6: 'تعريف المستودعات',
+    warehouses_sub7: 'تقارير حركة الأصناف والمخزون',
+    human_resources: 'الموارد البشرية',
+    human_resources_sub1: 'إعدادات هيكل الرواتب',
+    human_resources_sub2: 'سجل السلف والقروض',
+    human_resources_sub3: 'المكافآت والبدلات الاستثنائية',
+    human_resources_sub4: 'الخصومات والجزاءات',
+    human_resources_sub5: 'شاشة احتساب مسير الرواتب',
+    human_resources_sub6: 'اعتماد صرف الرواتب',
+    human_resources_sub7: 'تقارير الرواتب والتحويلات البنكية',
+    settings: 'الإعدادات',
+    settings_sub1: 'بيانات الشركة',
+    settings_sub2: 'إدارة المستخدمين والصلاحات',
+    settings_sub3: 'إعدادات السنة المالية',
+    settings_sub4: 'تعريف العملات وأسعار الصرف',
+    settings_sub5: 'إعدادات الضرائب',
+    settings_sub6: 'إعدادات التنبيهات والرسائل',
+    settings_sub7: 'النسخ الاحتياطي واستعادة البيانات',
+    settings_sub8: 'سجل الأحداث / مراقبة النظام',
+    settings_sub9: 'إعدادات الطابعات والتقارير',
   },
 };
+
+const menuGroups = [
+  {
+    key: 'daily',
+    children: ['daily_sub1', 'daily_sub2', 'daily_sub3', 'daily_sub4', 'daily_sub5'],
+  },
+  {
+    key: 'accounts',
+    children: [
+      'accounts_sub0',
+      'accounts_sub1',
+      'accounts_sub2',
+      'accounts_sub3',
+      'accounts_sub4',
+    ],
+  },
+  {
+    key: 'statement',
+    children: [
+      'statement_sub0',
+      'statement_sub0b',
+      'statement_sub1',
+      'statement_sub2',
+      'statement_sub3',
+      'statement_sub4',
+    ],
+  },
+  {
+    key: 'receipts_payments',
+    children: ['receipts_payments_sub', 'receipts_payments_sub3'],
+  },
+  {
+    key: 'vat',
+    children: ['vat_sub1', 'vat_sub2', 'vat_sub3'],
+  },
+  {
+    key: 'sales',
+    children: [
+      'sales_sub1',
+      'sales_sub2',
+      'sales_sub3',
+      'sales_sub4',
+      'sales_sub5',
+      'sales_sub6',
+      'sales_sub7',
+    ],
+  },
+  {
+    key: 'purchases',
+    children: [
+      'purchases_sub1',
+      'purchases_sub2',
+      'purchases_sub3',
+      'purchases_sub4',
+      'purchases_sub5',
+      'purchases_sub6',
+      'purchases_sub7',
+    ],
+  },
+  {
+    key: 'warehouses',
+    children: [
+      'warehouses_sub1',
+      'warehouses_sub2',
+      'warehouses_sub3',
+      'warehouses_sub4',
+      'warehouses_sub5',
+      'warehouses_sub6',
+      'warehouses_sub7',
+    ],
+  },
+  {
+    key: 'human_resources',
+    children: [
+      'human_resources_sub1',
+      'human_resources_sub2',
+      'human_resources_sub3',
+      'human_resources_sub4',
+      'human_resources_sub5',
+      'human_resources_sub6',
+      'human_resources_sub7',
+    ],
+  },
+  {
+    key: 'settings',
+    children: [
+      'settings_sub1',
+      'settings_sub2',
+      'settings_sub3',
+      'settings_sub4',
+      'settings_sub5',
+      'settings_sub6',
+      'settings_sub7',
+      'settings_sub8',
+      'settings_sub9',
+    ],
+  },
+];
 
 let activeMenuKey = null;
 
@@ -338,14 +400,18 @@ renderTree();
 
 const renderMenu = () => {
   if (!menuContainer) return;
-  menuContainer.innerHTML = Object.values(SCREEN_NAMES)
+  if (menuTitle) {
+    menuTitle.textContent = SCREEN_NAMES.ar.menu;
+  }
+
+  menuContainer.innerHTML = menuGroups
     .map((group) => {
       const childrenHtml = group.children
-        .map((child) => {
-          const activeClass = child.key === activeMenuKey ? 'active' : '';
+        .map((childKey) => {
+          const activeClass = childKey === activeMenuKey ? 'active' : '';
           return `
-            <button class="menu-item ${activeClass}" type="button" data-key="${child.key}">
-              ${child.label}
+            <button class="menu-item ${activeClass}" type="button" data-key="${childKey}">
+              ${SCREEN_NAMES.ar[childKey]}
             </button>
           `;
         })
@@ -353,8 +419,8 @@ const renderMenu = () => {
 
       return `
         <div class="menu-group">
-          <button class="menu-parent" type="button" data-parent="${group.label}">
-            ${group.label}
+          <button class="menu-parent" type="button" data-parent="${group.key}">
+            ${SCREEN_NAMES.ar[group.key]}
             <span>▾</span>
           </button>
           <div class="menu-children">${childrenHtml}</div>
@@ -433,7 +499,7 @@ if (menuContainer) {
     activeMenuKey = key;
     renderMenu();
 
-    const selectedLabel = itemButton.textContent.trim();
+    const selectedLabel = SCREEN_NAMES.ar[key] ?? itemButton.textContent.trim();
     if (key === 'accounts_sub0') {
       showFinanceTree();
       setScreenContent('شجرة الحسابات', 'إدارة دليل الحسابات وإضافة الحسابات وتعديلها.');
