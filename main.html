@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>الشاشة الرئيسية</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="excel-screen">
+      <section class="excel-card" aria-labelledby="excel-title">
+        <header class="excel-header">
+          <div>
+            <h2 id="excel-title">لوحة البيانات</h2>
+            <p class="subtitle">مرحباً بك في الشاشة الرئيسية</p>
+          </div>
+          <a class="secondary" href="index.html">تسجيل خروج</a>
+        </header>
+
+        <div class="excel-toolbar" aria-label="شريط الأدوات">
+          <span>ملف</span>
+          <span>تحرير</span>
+          <span>عرض</span>
+          <span>إدراج</span>
+          <span>تنسيق</span>
+          <span>بيانات</span>
+          <span>مساعدة</span>
+        </div>
+
+        <section class="main-layout" aria-label="القائمة الرئيسية">
+          <aside class="side-box" aria-label="القائمة الجانبية">
+            <button class="hub-btn hub-main" type="button" id="btn-1" data-key="1">
+              زر الرئيسية
+            </button>
+            <div class="dropdown" id="dropdown" hidden>
+              <button class="dropdown-item" type="button" id="btn-2" data-key="2">2</button>
+              <button class="dropdown-item" type="button" id="btn-3" data-key="3">3</button>
+              <button class="dropdown-item" type="button" id="btn-4" data-key="4">4</button>
+              <button class="dropdown-item" type="button" id="btn-5" data-key="5">5</button>
+              <button class="dropdown-item" type="button" id="btn-6" data-key="6">6</button>
+              <button class="dropdown-item" type="button" id="btn-7" data-key="7">7</button>
+              <button class="dropdown-item" type="button" id="btn-8" data-key="8">8</button>
+              <button class="dropdown-item" type="button" id="btn-9" data-key="9">9</button>
+              <button class="dropdown-item" type="button" id="btn-10" data-key="10">10</button>
+              <button class="dropdown-item" type="button" id="btn-11" data-key="11">11</button>
+            </div>
+          </aside>
+        </section>
+
+        <div class="excel-grid" role="table" aria-label="جدول بيانات">
+          <div class="excel-row header" role="row">
+            <span role="columnheader"></span>
+            <span role="columnheader">A</span>
+            <span role="columnheader">B</span>
+            <span role="columnheader">C</span>
+            <span role="columnheader">D</span>
+            <span role="columnheader">E</span>
+          </div>
+          <div class="excel-row" role="row">
+            <span role="rowheader">1</span>
+            <span>اسم</span>
+            <span>القسم</span>
+            <span>المستوى</span>
+            <span>الحالة</span>
+            <span>ملاحظات</span>
+          </div>
+          <div class="excel-row" role="row">
+            <span role="rowheader">2</span>
+            <span>أحمد</span>
+            <span>المبيعات</span>
+            <span>متقدم</span>
+            <span class="tag success">نشط</span>
+            <span>متابعة أسبوعية</span>
+          </div>
+          <div class="excel-row" role="row">
+            <span role="rowheader">3</span>
+            <span>سارة</span>
+            <span>التسويق</span>
+            <span>متوسط</span>
+            <span class="tag warning">مراجعة</span>
+            <span>حملة رمضان</span>
+          </div>
+          <div class="excel-row" role="row">
+            <span role="rowheader">4</span>
+            <span>ليلى</span>
+            <span>المنتج</span>
+            <span>خبير</span>
+            <span class="tag success">مكتمل</span>
+            <span>إطلاق النسخة</span>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
