@@ -231,6 +231,18 @@ const codeExists = (nodes, code, excludeCode = null) => {
   return false;
 };
 
+const isNumericCode = (code) => /^\d+$/.test(code);
+
+const updateDescendantCodes = (node, oldPrefix, newPrefix) => {
+  if (!node.children) return;
+  node.children.forEach((child) => {
+    if (child.code.startsWith(oldPrefix)) {
+      child.code = newPrefix + child.code.slice(oldPrefix.length);
+    }
+    updateDescendantCodes(child, oldPrefix, newPrefix);
+  });
+};
+
 renderTree();
 
 if (mainButton && dropdown) {
@@ -273,19 +285,31 @@ if (treeContainer) {
 
 if (addAccountButton) {
   addAccountButton.addEventListener('click', () => {
-    const newCode = prompt('أدخل كود الحساب الجديد:');
+    const parentInfo = selectedAccountCode
+      ? ` (تابع لـ ${selectedAccountCode})`
+      : '';
+    const newCode = prompt(`أدخل كود الحساب الجديد${parentInfo}:`);
     if (!newCode) return;
-    if (codeExists(chartOfAccounts, newCode)) {
+    const trimmedCode = newCode.trim();
+    if (!isNumericCode(trimmedCode)) {
+      alert('كود الحساب يجب أن يحتوي على أرقام فقط.');
+      return;
+    }
+    if (codeExists(chartOfAccounts, trimmedCode)) {
       alert('هذا الكود موجود بالفعل. اختر كوداً مختلفاً.');
       return;
     }
     const newName = prompt('أدخل اسم الحساب الجديد:');
     if (!newName) return;
 
-    const newAccount = { code: newCode.trim(), name: newName.trim() };
+    const newAccount = { code: trimmedCode, name: newName.trim() };
     if (selectedAccountCode) {
       const found = findNodeByCode(chartOfAccounts, selectedAccountCode);
       if (found?.node) {
+        if (!trimmedCode.startsWith(found.node.code)) {
+          alert('كود الحساب يجب أن يبدأ بكود الحساب الأب.');
+          return;
+        }
         if (!found.node.children) {
           found.node.children = [];
         }
@@ -313,15 +337,30 @@ if (editAccountButton) {
 
     const newCode = prompt('أدخل الكود الجديد:', found.node.code);
     if (!newCode) return;
-    if (codeExists(chartOfAccounts, newCode.trim(), found.node.code)) {
+    const trimmedCode = newCode.trim();
+    if (!isNumericCode(trimmedCode)) {
+      alert('كود الحساب يجب أن يحتوي على أرقام فقط.');
+      return;
+    }
+    if (codeExists(chartOfAccounts, trimmedCode, found.node.code)) {
       alert('هذا الكود موجود بالفعل. اختر كوداً مختلفاً.');
       return;
     }
     const newName = prompt('أدخل الاسم الجديد:', found.node.name);
     if (!newName) return;
 
-    found.node.code = newCode.trim();
+    if (found.parent && !trimmedCode.startsWith(found.parent.code)) {
+      alert('كود الحساب يجب أن يبدأ بكود الحساب الأب.');
+      return;
+    }
+
+    const oldCode = found.node.code;
+
+    found.node.code = trimmedCode;
     found.node.name = newName.trim();
+    if (oldCode !== trimmedCode) {
+      updateDescendantCodes(found.node, oldCode, trimmedCode);
+    }
     selectedAccountCode = found.node.code;
     saveTree(chartOfAccounts);
     renderTree();
