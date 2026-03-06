@@ -187,41 +187,41 @@ if (mainButton && dropdown) {
       financeMenu.hidden = true;
     }
   });
+}
 
-  if (financeButton && financeMenu) {
-    financeButton.addEventListener('click', (event) => {
-      event.stopPropagation();
-      financeMenu.hidden = !financeMenu.hidden;
-      if (financeTreeSection) {
-        financeTreeSection.hidden = false;
-        openWindow('assetsWin');
-      }
-    });
-  }
-
-  if (financeTreeButton && financeTreeSection) {
-    financeTreeButton.addEventListener('click', (event) => {
-      event.stopPropagation();
+if (financeButton && financeMenu) {
+  financeButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    financeMenu.hidden = !financeMenu.hidden;
+    if (financeTreeSection) {
       financeTreeSection.hidden = false;
       openWindow('assetsWin');
-    });
-  }
-
-  if (closeTreeButton && financeTreeSection) {
-    closeTreeButton.addEventListener('click', () => {
-      financeTreeSection.hidden = true;
-    });
-  }
-
-  document.addEventListener('click', (event) => {
-    if (!dropdown.contains(event.target) && event.target !== mainButton) {
-      dropdown.hidden = true;
-      if (financeMenu) {
-        financeMenu.hidden = true;
-      }
     }
   });
 }
+
+if (financeTreeButton && financeTreeSection) {
+  financeTreeButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    financeTreeSection.hidden = false;
+    openWindow('assetsWin');
+  });
+}
+
+if (closeTreeButton && financeTreeSection) {
+  closeTreeButton.addEventListener('click', () => {
+    financeTreeSection.hidden = true;
+  });
+}
+
+document.addEventListener('click', (event) => {
+  if (dropdown && mainButton && !dropdown.contains(event.target) && event.target !== mainButton) {
+    dropdown.hidden = true;
+    if (financeMenu) {
+      financeMenu.hidden = true;
+    }
+  }
+});
 
 const accountIcons = document.querySelectorAll('.account-icon');
 
@@ -238,13 +238,15 @@ const openWindow = (windowId) => {
   resetWindowSize(windowElement);
 };
 
-accountIcons.forEach((icon) => {
-  icon.addEventListener('click', () => {
-    const windowId = icon.getAttribute('data-win');
-    if (windowId) {
-      openWindow(windowId);
-    }
-  });
+document.addEventListener('click', (event) => {
+  const icon = event.target.closest('.account-icon');
+  if (!icon) {
+    return;
+  }
+  const windowId = icon.getAttribute('data-win');
+  if (windowId) {
+    openWindow(windowId);
+  }
 });
 
 document.querySelectorAll('.erp-window').forEach((windowElement) => {
