@@ -93,6 +93,21 @@ button.secondary {
   gap: 10px;
 }
 
+.sidebar-actions {
+  margin-top: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.sidebar-btn {
+  background: #111827;
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .menu-item {
   background: #f1f5f9;
   color: #1f2937;
