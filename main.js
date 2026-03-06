@@ -46,6 +46,7 @@ if (mainButton && dropdown) {
     financeTreeButton.addEventListener('click', (event) => {
       event.stopPropagation();
       financeTreeSection.hidden = false;
+      openWindow('assetsWin');
     });
   }
 
