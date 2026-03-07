@@ -213,6 +213,8 @@ const screenTitle = document.getElementById('screen-title');
 const screenBody = document.getElementById('screen-body');
 const menu = document.getElementById('menu');
 const screenButtons = document.getElementById('screen-buttons');
+const menuTitle = document.getElementById('menu-title');
+const menuPanel = document.getElementById('menu-panel');
 
 const setScreen = (title, html) => {
   screenTitle.textContent = title;
@@ -525,6 +527,14 @@ if (screenButtons) {
     if (!button) return;
     const label = button.textContent.trim();
     renderSimpleScreen(label);
+  });
+}
+
+if (menuTitle && menuPanel) {
+  menuPanel.hidden = true;
+  menuTitle.style.cursor = 'pointer';
+  menuTitle.addEventListener('click', () => {
+    menuPanel.hidden = !menuPanel.hidden;
   });
 }
 
