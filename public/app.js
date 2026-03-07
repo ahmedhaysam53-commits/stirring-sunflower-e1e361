@@ -531,7 +531,7 @@ if (screenButtons) {
 }
 
 if (menuTitle && menuPanel) {
-  menuPanel.hidden = true;
+  menuPanel.hidden = false;
   menuTitle.style.cursor = 'pointer';
   menuTitle.addEventListener('click', () => {
     menuPanel.hidden = !menuPanel.hidden;
