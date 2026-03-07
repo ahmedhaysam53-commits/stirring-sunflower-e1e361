@@ -12,6 +12,7 @@
   --success: #1f9d55;
   --border: #e3e6f0;
   --shadow: 0 20px 60px rgba(20, 20, 50, 0.12);
+  --bg-image: url('https://images.unsplash.com/photo-1526498460520-4c246339dccb?q=80&w=1920&auto=format&fit=crop');
 }
 
 * {
@@ -21,9 +22,20 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #fefefe, var(--bg));
+  background: radial-gradient(circle at top, rgba(254, 254, 254, 0.7), var(--bg)), var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 15, 30, 0.45), rgba(255, 255, 255, 0.15));
+  z-index: -1;
 }
 
 .screen {
@@ -58,6 +70,7 @@ body {
   padding: 28px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
 }
 
 .excel-header {
@@ -209,12 +222,13 @@ body {
 }
 
 .card {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.88);
   width: min(420px, 100%);
   border-radius: 24px;
   padding: 32px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
 }
 
 .card__header {
@@ -288,6 +302,7 @@ input[type='password']:focus {
   background: var(--primary);
   color: #fff;
   font-weight: 600;
+  box-shadow: 0 12px 24px rgba(91, 124, 250, 0.25);
 }
 
 .primary:hover {
