@@ -132,6 +132,22 @@ button.secondary {
   margin-bottom: 14px;
 }
 
+.screen-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.screen-btn {
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .grid {
   display: grid;
   gap: 12px;

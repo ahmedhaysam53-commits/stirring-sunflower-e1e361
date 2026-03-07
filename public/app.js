@@ -212,6 +212,7 @@ const logoutBtn = document.getElementById('logout');
 const screenTitle = document.getElementById('screen-title');
 const screenBody = document.getElementById('screen-body');
 const menu = document.getElementById('menu');
+const screenButtons = document.getElementById('screen-buttons');
 
 const setScreen = (title, html) => {
   screenTitle.textContent = title;
@@ -499,6 +500,10 @@ const screenHandlers = {
   reports: renderReports,
 };
 
+const renderSimpleScreen = (label) => {
+  setScreen(label, `<div class="auth-card">تم فتح ${label}.</div>`);
+};
+
 menu.addEventListener('click', async (event) => {
   const button = event.target.closest('.menu-item');
   if (!button) return;
@@ -513,6 +518,15 @@ menu.addEventListener('click', async (event) => {
     }
   }
 });
+
+if (screenButtons) {
+  screenButtons.addEventListener('click', (event) => {
+    const button = event.target.closest('.screen-btn');
+    if (!button) return;
+    const label = button.textContent.trim();
+    renderSimpleScreen(label);
+  });
+}
 
 logoutBtn.addEventListener('click', () => {
   API.token = null;
