@@ -33,6 +33,16 @@ body {
   padding: 24px;
 }
 
+.pin-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(245, 246, 251, 0.96);
+  z-index: 1000;
+}
+
 .excel-screen {
   min-height: 100vh;
   display: grid;

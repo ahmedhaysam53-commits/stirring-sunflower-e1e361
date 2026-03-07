@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="public/styles.css" />
   </head>
   <body>
+    <section class="pin-screen" id="pin-screen">
+      <div class="card">
+        <div class="card__header">
+          <div class="logo">🔒</div>
+          <div>
+            <h1>شاشة دخول</h1>
+            <p class="subtitle">أدخل رمز الدخول المكوّن من 6 أرقام</p>
+          </div>
+        </div>
+        <form class="card__form" id="pin-form">
+          <div class="field">
+            <label class="field__label" for="pin-input">رمز الدخول</label>
+            <input id="pin-input" type="password" inputmode="numeric" maxlength="6" required />
+          </div>
+          <button class="primary" type="submit">دخول</button>
+          <p class="status" id="pin-status"></p>
+        </form>
+      </div>
+    </section>
     <header class="app-header">
       <h1>النظام المحاسبي</h1>
       <div class="user-actions" id="user-actions">
@@ -52,7 +71,7 @@
         </div>
       </section>
 
-      <section class="app-layout" id="app-layout">
+      <section class="app-layout" id="app-layout" hidden>
         <aside class="sidebar">
           <h3 id="menu-title">القائمة</h3>
           <div id="menu-panel">

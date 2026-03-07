@@ -585,12 +585,48 @@ registerForm.addEventListener('submit', async (event) => {
   }
 });
 
-const savedToken = localStorage.getItem('token');
-if (STATIC_MODE) {
-  showApp();
-} else if (savedToken) {
-  API.token = savedToken;
-  showApp();
-} else {
-  showAuth();
+const PIN_CODE = '868412';
+const pinScreen = document.getElementById('pin-screen');
+const pinForm = document.getElementById('pin-form');
+const pinInput = document.getElementById('pin-input');
+const pinStatus = document.getElementById('pin-status');
+
+const unlockApp = () => {
+  if (pinScreen) pinScreen.hidden = true;
+  if (STATIC_MODE) {
+    showApp();
+  } else {
+    const savedToken = localStorage.getItem('token');
+    if (savedToken) {
+      API.token = savedToken;
+      showApp();
+    } else {
+      showAuth();
+    }
+  }
+};
+
+if (pinForm) {
+  pinForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const entered = pinInput?.value?.trim();
+    if (entered === PIN_CODE) {
+      if (pinStatus) {
+        pinStatus.textContent = 'تم الدخول بنجاح';
+        pinStatus.className = 'status success';
+      }
+      unlockApp();
+    } else {
+      if (pinStatus) {
+        pinStatus.textContent = 'رمز غير صحيح';
+        pinStatus.className = 'status error';
+      }
+    }
+  });
+}
+
+if (pinScreen) {
+  authPanel.hidden = true;
+  appLayout.hidden = true;
+  pinScreen.hidden = false;
 }
