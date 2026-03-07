@@ -15,6 +15,13 @@ const StaticStore = {
   },
 };
 
+const createId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+};
+
 const StaticAPI = {
   token: null,
   async request(path, options = {}) {
@@ -44,7 +51,7 @@ const StaticAPI = {
         throw new Error('Email already exists');
       }
       const user = {
-        id: crypto.randomUUID(),
+        id: createId(),
         name: body.name,
         email: body.email,
         password: body.password,
@@ -67,7 +74,7 @@ const StaticAPI = {
     }
     if (path === '/api/accounts' && method === 'POST') {
       const item = {
-        id: crypto.randomUUID(),
+        id: createId(),
         code: body.code,
         name: body.name,
         type: body.type,
@@ -80,7 +87,7 @@ const StaticAPI = {
 
     if (path === '/api/customers' && method === 'GET') return data.customers;
     if (path === '/api/customers' && method === 'POST') {
-      const item = { id: crypto.randomUUID(), balance: 0, ...body };
+      const item = { id: createId(), balance: 0, ...body };
       data.customers.push(item);
       saveAll();
       return item;
@@ -88,7 +95,7 @@ const StaticAPI = {
 
     if (path === '/api/suppliers' && method === 'GET') return data.suppliers;
     if (path === '/api/suppliers' && method === 'POST') {
-      const item = { id: crypto.randomUUID(), balance: 0, ...body };
+      const item = { id: createId(), balance: 0, ...body };
       data.suppliers.push(item);
       saveAll();
       return item;
@@ -96,7 +103,7 @@ const StaticAPI = {
 
     if (path === '/api/receipts' && method === 'GET') return data.receipts;
     if (path === '/api/receipts' && method === 'POST') {
-      const item = { id: crypto.randomUUID(), ...body };
+      const item = { id: createId(), ...body };
       data.receipts.push(item);
       saveAll();
       return item;
@@ -104,7 +111,7 @@ const StaticAPI = {
 
     if (path === '/api/payments' && method === 'GET') return data.payments;
     if (path === '/api/payments' && method === 'POST') {
-      const item = { id: crypto.randomUUID(), ...body };
+      const item = { id: createId(), ...body };
       data.payments.push(item);
       saveAll();
       return item;
@@ -113,13 +120,13 @@ const StaticAPI = {
     if (path === '/api/journals' && method === 'GET') return data.journals;
     if (path === '/api/journals' && method === 'POST') {
       const entry = {
-        id: crypto.randomUUID(),
+        id: createId(),
         entry_date: body.entry_date,
         description: body.description || '',
       };
       data.journals.push(entry);
       (body.lines || []).forEach((line) => {
-        data.journal_lines.push({ id: crypto.randomUUID(), entry_id: entry.id, ...line });
+        data.journal_lines.push({ id: createId(), entry_id: entry.id, ...line });
       });
       saveAll();
       return entry;
