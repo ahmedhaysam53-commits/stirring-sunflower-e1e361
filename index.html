@@ -19,7 +19,15 @@
         <form class="card__form" id="pin-form">
           <div class="field">
             <label class="field__label" for="pin-input">رمز الدخول</label>
-            <input id="pin-input" type="password" inputmode="numeric" maxlength="6" required />
+            <input
+              id="pin-input"
+              class="pin-input"
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              pattern="[0-9]{6}"
+              required
+            />
           </div>
           <button class="primary" type="submit">دخول</button>
           <p class="status" id="pin-status"></p>
